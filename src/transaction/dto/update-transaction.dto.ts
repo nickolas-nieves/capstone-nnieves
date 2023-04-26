@@ -8,5 +8,5 @@ export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {
   status: string;
   price: number;
   user_id: User;
-  trip_id: Trip;
+  trip: Trip;
 }

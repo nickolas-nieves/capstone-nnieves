@@ -6,5 +6,5 @@ export class CreateTransactionDto {
   status: string;
   price: number;
   user_id: User;
-  trip_id: Trip;
+  trip: Trip;
 }

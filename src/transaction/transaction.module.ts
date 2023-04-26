@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { TransactionController } from './transaction.controller';
-import { AdminAuthMiddleware } from 'src/auth/auth.middleware';
+import { AdminAuthMiddleware, AuthMiddleware } from 'src/auth/auth.middleware';
 import { BcryptModule } from 'nest-bcrypt';
 
 @Module({
@@ -18,6 +18,12 @@ export class TransactionModule {
         { path: 'transaction', method: RequestMethod.PATCH },
         { path: 'transaction', method: RequestMethod.DELETE },
         { path: 'transaction', method: RequestMethod.POST },
+      );
+
+      consumer
+      .apply(AuthMiddleware)
+      .forRoutes(
+        { path: 'transaction/pay', method: RequestMethod.PATCH },
       );
 
   }

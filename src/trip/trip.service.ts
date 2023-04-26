@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Req } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Req, Body } from '@nestjs/common';
 import { UpdateTripDto } from './dto/update-trip.dto';
 import { EntityManager } from '@mikro-orm/mysql';
 import { Trip } from './entities/trip.entity';
@@ -20,9 +20,9 @@ export class TripService {
     @Req() req: CustomRequest,
   ): Promise<Trip> {
     const trip = await this.em.create(Trip, createTripDto);
-    const transaction = this.em.create(Transaction, {
+    const transaction = await this.em.create(Transaction, {
       ...createTransactionDto,
-      trip_id: trip,
+      trip: trip,
     });
     transaction.status = 'unpaid';
     transaction.user_id = req.user;
@@ -43,7 +43,7 @@ export class TripService {
   }
 
   //Updates all provided properties of Trip by passed id
-  async update(id: string, updateTripDto: UpdateTripDto) {
+  async update(id: string,@Body() updateTripDto: UpdateTripDto) {
     const trip = await this.em.findOne(Trip, { trip_id: id });
 
     if (trip) {
@@ -53,9 +53,10 @@ export class TripService {
         trip.end_location = updateTripDto.end_location;
       if (updateTripDto.start_time) trip.start_time = updateTripDto.start_time;
       if (updateTripDto.end_time) {
+        const time = new Date(updateTripDto.end_time)
         trip.end_time = updateTripDto.end_time;
         trip.transaction_id.price =
-          (trip.start_time.getTime(), trip.end_time.getTime()) / 100000;
+          (time.getTime() - trip.start_time.getTime()) / 100000;
       }
 
       this.em.persistAndFlush(trip);

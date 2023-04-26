@@ -50,7 +50,7 @@ export class Trip {
     this._end_time = new Date(value.toISOString());
   }
 
-  @OneToOne(() => Transaction, (transaction) => transaction.trip_id, {
+  @OneToOne(() => Transaction, (transaction) => transaction.trip, {
     owner: true,
   })
   transaction_id!: Transaction;

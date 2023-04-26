@@ -37,6 +37,7 @@ export class AuthMiddleware implements NestMiddleware {
 
       if (user && this.bcryptService.compareSync(password, user.password)) {
         req.user = user;
+        console.log(req.user, user)
         return next();
       }
     }

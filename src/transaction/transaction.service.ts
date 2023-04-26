@@ -53,6 +53,7 @@ export class TransactionService {
     });
 
     if (transaction) {
+      console.log(req.user)
       if (req.user.balance - transaction.price > 0){
         req.user.balance = req.user.balance - transaction.price;
         transaction.price = 0

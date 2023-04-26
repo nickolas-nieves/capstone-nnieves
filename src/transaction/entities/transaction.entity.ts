@@ -32,5 +32,5 @@ export class Transaction {
   user_id!: User;
 
   @OneToOne(() => Trip, (trip) => trip.transaction_id)
-  trip_id!: Trip;
+  trip!: Trip;
 }
