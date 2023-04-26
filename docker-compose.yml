@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  mysql-development:
+    image: mysql:latest
+    env_file:
+      - ./dev.env
+    ports:
+      - "3308:3306"
+  mysql-test:
+    image: mysql:latest
+    env_file:
+      - ./test.env
+    ports:
+      - "3309:3306"
